@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 struct cuidador
@@ -12,7 +13,7 @@ struct cuidador
 
 Cuidador* inicializaCuidador(char* nome){
     Cuidador* aux = (Cuidador*) malloc(sizeof(Cuidador));
-    aux->nome = nome;
+    aux->nome = strdup(nome);
     aux->posicao[0] = 0;
     aux->posicao[1] = 0;
     return aux;

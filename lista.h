@@ -12,5 +12,6 @@ void retiraNome(Lista* lista, char* nome);
 Idoso* getIdoso(Lista* lista, char* nome);
 void imprimeLista(Lista* lista);
 void liberaLista(Lista* lista);
+void liberaCelulasAmigos(Lista* lista);
 
 #endif // LISTA_H

@@ -40,7 +40,6 @@ Cuidador* getCuidador(ListaCuidador* listaCuidador, char* nome){
         p=p->prox;
     }
     if(!p){
-        printf("Não foi encontrado cuidador\n");
         return NULL;
     }
     return p->cuidador;
@@ -62,3 +61,13 @@ void liberaListaCuidador(ListaCuidador* listaCuidador){
     }
     free(listaCuidador);
 }
+void liberaCelulasCuidadores(ListaCuidador* lista){
+    CelulaCuidador* p = lista->primeiro;
+    CelulaCuidador* temp = NULL;
+    while(p){
+        temp=p->prox;
+        free(p);
+        p=temp;
+    }
+    free(lista); 
+};

@@ -16,9 +16,8 @@ int main(int argc, char* argv[ ]){
 
     leRedeApoio(lista);
     leRedeCuidadores(listaCuidador, lista);
-    
-    //liberaLista(lista);
-    //liberaListaCuidador(listaCuidador);
+    liberaListaCuidador(listaCuidador);
+    liberaLista(lista);
 
     return 0;
 }

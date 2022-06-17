@@ -12,5 +12,6 @@ void insereLastCuidadores(ListaCuidador* listaCuidador, Cuidador* cuidador);
 Cuidador* getCuidador(ListaCuidador* listaCuidador, char* nome);
 void imprimeListaCuidador(ListaCuidador* listaCuidador);
 void liberaListaCuidador(ListaCuidador* listaCuidador);
+void liberaCelulasCuidadores(ListaCuidador* lista);
 
 #endif // LISTACUIDADORES_H

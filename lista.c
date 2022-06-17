@@ -93,6 +93,15 @@ void liberaLista(Lista* lista){
         free(p);
         p=temp;
     }
-    free(temp);
+    free(lista); 
+};
+void liberaCelulasAmigos(Lista* lista){
+    Celula* p = lista->primeiro;
+    Celula* temp = NULL;
+    while(p){
+        temp=p->prox;
+        free(p);
+        p=temp;
+    }
     free(lista); 
 };

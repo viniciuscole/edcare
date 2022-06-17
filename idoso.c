@@ -34,27 +34,37 @@ void addAmigo(Idoso* idoso1, Idoso* idoso2){
 
 char* getNome(Idoso* idoso){
     return idoso->nome;
-}
+};
 
 ListaCuidador* getListaCuidador(Idoso* idoso){
     return idoso->cuidadores;
 }
 
+Lista* getListaAmigos(Idoso* idoso){
+    return idoso->amigos;
+}
+
 void addCuidador(Idoso* idoso, Cuidador* cuidador){
     Cuidador* aux = getCuidador(getListaCuidador(idoso), getNomeCuidador(cuidador));  //checa se já existe o cuidador na lista
-    printf("lista cuidadores: ");
-    imprimeListaCuidador(getListaCuidador(idoso));
     if(aux==NULL){
         insereLastCuidadores(getListaCuidador(idoso), cuidador);
     }
+    free(aux);
 }
 
-void printaAmigos(Idoso* idoso){
-    imprimeLista(idoso->amigos);
+void imprimeAmigos(Idoso* idoso){
+    imprimeLista(getListaAmigos(idoso));
+};
+
+void imprimeCuidador(Idoso* idoso){
+    printf("Cuidadores de %s: ", getNome(idoso));
+    
+    imprimeListaCuidador(getListaCuidador(idoso));
 };
 
 void liberaIdoso(Idoso* idoso){
     free(idoso->nome);
-    liberaLista(idoso->amigos);
+    liberaCelulasAmigos(idoso->amigos);
+    liberaCelulasCuidadores(idoso->cuidadores);
     free(idoso);
 }

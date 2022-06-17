@@ -24,8 +24,7 @@ void leRedeApoio(Lista* lista){
     }
     char *amigo1, *amigo2;
     char letra;
-    while(feof(apoioFile)){
-        fscanf(apoioFile, "%s", linha);
+    while(fscanf(apoioFile, "%s", linha) != EOF){
         amigo1 = strtok(linha, ";");
         amigo2 = strtok(NULL, ";");
         addAmigo(getIdoso(lista, amigo1), getIdoso(lista, amigo2));
@@ -42,7 +41,6 @@ void leRedeCuidadores(ListaCuidador* listaCuidador, Lista* listaIdosos){
         exit(1);
     }
     fscanf(cuidadoresFile,"%s", nomes);
-    printf("%s\n", nomes);
     Cuidador* aux;
     char * nomeCuidador = strtok(nomes, ";");  
     while(nomeCuidador != NULL){                 
@@ -50,14 +48,12 @@ void leRedeCuidadores(ListaCuidador* listaCuidador, Lista* listaIdosos){
         insereLastCuidadores(listaCuidador, aux);
         nomeCuidador = strtok(NULL, ";");
     }
-    //imprimeListaCuidador(listaCuidador);
     char nomes2[100], *idoso, *cuidador;
     while(fscanf(cuidadoresFile,"%s", nomes2)!=EOF){
         idoso = strtok(nomes2, ";");
         do{
             cuidador = strtok(NULL, ";");
             if(cuidador != NULL){
-                //imprimeLista(listaIdosos);
                 addCuidador(getIdoso(listaIdosos, idoso), getCuidador(listaCuidador, cuidador));
             }
         }while(cuidador != NULL);
