@@ -76,19 +76,21 @@ Idoso* getAmigoProximo(Idoso* idoso){
     return AmigoProximoPosicao(getListaAmigos(idoso), getPosicaoIdosos(idoso));
 }
 
-int atualizaIdoso(Idoso* idoso, float temperatura, int lat, int lon, int queda){
+void atualizaIdoso(Idoso* idoso, float temperatura, int lat, int lon, int queda){
     idoso->temperatura = temperatura;
     idoso->posicao[0] = lat;
     idoso->posicao[1] = lon;
     idoso->queda = queda;
-    if(queda){
+};
+int situacaoIdoso(Idoso* idoso){
+    if(idoso->queda){
         return 4;
     }
-    if(temperatura>=38){
+    if(idoso->temperatura>=38){
         idoso->qtdFebre=0;
         return 3;
     }
-    if(temperatura>37){
+    if(idoso->temperatura>37){
         idoso->qtdFebre++;
         if(idoso->qtdFebre>=4){
             idoso->qtdFebre=0;
@@ -98,6 +100,10 @@ int atualizaIdoso(Idoso* idoso, float temperatura, int lat, int lon, int queda){
     }
     return 0;
 };
+
+void atualizaIdosoFalecimento(Idoso* idoso){
+    idoso->falecido = 1;
+}
 
 ListaCuidador* getListaCuidador(Idoso* idoso){
     return idoso->cuidadores;
@@ -111,10 +117,13 @@ FILE* getArquivoSaida(Idoso* idoso){
     return idoso->arquivoSaida;
 }
 
+int idosoFalecido(Idoso* idoso){
+    return idoso->falecido;
+}
+
 Lista* getListaAmigos(Idoso* idoso){
     return idoso->amigos;
 }
-
 
 void addCuidador(Idoso* idoso, Cuidador* cuidador){
     Cuidador* aux = getCuidador(getListaCuidador(idoso), getNomeCuidador(cuidador));  //checa se já existe o cuidador na lista

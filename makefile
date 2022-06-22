@@ -17,7 +17,7 @@ listaCuidadores.o: listaCuidadores.h
 	gcc -c listaCuidadores.c
 
 val: edcare.out
-	valgrind ./edcare.out 10
+	valgrind ./edcare.out 4
 
 clean: 
-	rm -f *.o
+	rm -f *.o *-saida.txt

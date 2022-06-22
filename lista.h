@@ -9,8 +9,8 @@ typedef struct lista Lista;
 
 Lista* inicLista();
 void insereLast(Lista* lista, Idoso* idoso);
+void retiraIdososFalecidos(Lista* lista);
 void retiraNome(Lista* lista, char* nome);
-void retiraPosicao(Lista* lista, int posicao);
 Idoso* getIdoso(Lista* lista, char* nome);
 Idoso* getIdosoPosicao(Lista* lista, int posicao);
 Idoso* AmigoProximoPosicao(Lista* amigos, int * posicao);

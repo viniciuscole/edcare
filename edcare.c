@@ -111,8 +111,8 @@ void leSensores(Lista* listaIdosos, ListaCuidador* listaCuidadores, int qtdLeitu
             lon=atoi(lonString);
             atualizaCuidador(getCuidadorPosicao(listaCuidadores, j), lat, lon);
         }
-        int n = getQtdIdosos(listaIdosos);  // n = quantidade de idosos
-        for(j=0;j<n;j++){
+        
+        for(j=0;j<getQtdIdosos(listaIdosos);j++){
             fscanf(getArquivoEntradaPosicao(listaIdosos, j), "%s", linha);
             if(strcmp(linha, "falecimento") != 0){
                 tempString=strtok(linha, ";");
@@ -123,57 +123,62 @@ void leSensores(Lista* listaIdosos, ListaCuidador* listaCuidadores, int qtdLeitu
                 lat = atoi(latString);
                 lon = atoi(lonString);
                 queda = atoi(quedaString);
-                Cuidador* aux;
-                Idoso* aux2;
-                fprintf(getArquivoSaidaPosicao(listaIdosos, j), "%d\n", j);
-                switch (atualizaIdoso(getIdosoPosicao(listaIdosos, j), temp, lat, lon, queda)) {
-                    case QUEDA:
-                        aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
-                        if(!aux){
-                            printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
-                            exit(1);
-                        }
-                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "queda, acionou %s\n", getNomeCuidador(aux));
-                        break;
-                    case ALTA:
-                        aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
-                        if(!aux){
-                            printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
-                            exit(1);
-                        }
-                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre alta, acionou %s\n", getNomeCuidador(aux));
-                        break;
-                    case QUATROBAIXA:
-                        aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
-                        if(!aux){
-                            printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
-                            exit(1);
-                        }
-                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre baixa pela quarta vez, acionou %s\n", getNomeCuidador(aux));
-                        break;
-                    case BAIXA:
-                        aux2 = getAmigoProximo(getIdosoPosicao(listaIdosos, j));
-                        if(!aux2){
-                            fprintf(getArquivoSaidaPosicao(listaIdosos, j), "Febre baixa mas, infelizmente, o idoso está sem amigos na rede\n");
-                            break;
-                        }
-                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre baixa, acionou amigo %s\n", getNome(aux2));
-                        break;
-                    case BEM:
-                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "tudo ok\n");
-                        break;
-                    default:
-                        printf("Erro ao atualizar idoso\n");
-                        break;
-                }
+                atualizaIdoso(getIdosoPosicao(listaIdosos, j), temp, lat, lon, queda);
             }
             else{
                 fprintf(getArquivoSaidaPosicao(listaIdosos, j), "falecimento\n");
                 fechaArquivoEntrada(getIdosoPosicao(listaIdosos, j));                                                      //fecha cada arquivo de leitura de cada idoso
                 fechaArquivoSaida(getIdosoPosicao(listaIdosos, j));  
-                retiraPosicao(listaIdosos, j);
+                atualizaIdosoFalecimento(getIdosoPosicao(listaIdosos, j));
             }
         }
+
+        retiraIdososFalecidos(listaIdosos);
+        for (j=0;j<getQtdIdosos(listaIdosos);j++){
+            Cuidador* aux;
+            Idoso* aux2;
+            switch (situacaoIdoso(getIdosoPosicao(listaIdosos, j))) {
+                case QUEDA:
+                    aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
+                    if(!aux){
+                        printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
+                        exit(1);
+                    }
+                    fprintf(getArquivoSaidaPosicao(listaIdosos, j), "queda, acionou %s\n", getNomeCuidador(aux));
+                    break;
+                case ALTA:
+                    aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
+                    if(!aux){
+                        printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
+                        exit(1);
+                    }
+                    fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre alta, acionou %s\n", getNomeCuidador(aux));
+                    break;
+                case QUATROBAIXA:
+                    aux = getCuidadorProximo(getIdosoPosicao(listaIdosos, j));
+                    if(!aux){
+                        printf("Erro ao encontrar cuidador mais próximos\n");       // para debbugar
+                        exit(1);
+                    }
+                    fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre baixa pela quarta vez, acionou %s\n", getNomeCuidador(aux));
+                    break;
+                case BAIXA:
+                    aux2 = getAmigoProximo(getIdosoPosicao(listaIdosos, j));
+                    if(!aux2){
+                        fprintf(getArquivoSaidaPosicao(listaIdosos, j), "Febre baixa mas, infelizmente, o idoso está sem amigos na rede\n");
+                        break;
+                    }
+                    fprintf(getArquivoSaidaPosicao(listaIdosos, j), "febre baixa, acionou amigo %s\n", getNome(aux2));
+                    break;
+                case BEM:
+                    fprintf(getArquivoSaidaPosicao(listaIdosos, j), "tudo ok\n");
+                    break;
+                default:
+                    printf("Erro ao atualizar idoso\n");
+                    break;
+                }
+        }
+        
     }
 
 
