@@ -16,6 +16,7 @@ int main(int argc, char* argv[ ]){
 
     leRedeApoio(lista);
     leRedeCuidadores(listaCuidador, lista);
+    leSensores(lista, listaCuidador, qtdLeituras);
     liberaListaCuidador(listaCuidador);
     liberaLista(lista);
 

@@ -5,6 +5,6 @@
 
 void leRedeApoio(Lista* lista);
 void leRedeCuidadores(ListaCuidador* listaCuidador, Lista* listaIdosos);
-
+void leSensores(Lista* listaIdosos, ListaCuidador* listaCuidadores, int qtdLeituras);
 
 #endif // EDCARE_H

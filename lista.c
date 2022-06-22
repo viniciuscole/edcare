@@ -66,6 +66,40 @@ void retiraNome(Lista* lista, char* nome){
     liberaIdoso(p->idoso);
     free(p);
 }
+void retiraPosicao(Lista* lista, int posicao){
+    Celula* anterior=NULL;
+    Celula* p = lista->primeiro;
+    int i=0;
+    while(p && i<posicao){
+        anterior=p;
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        printf("Não foi encontrado\n");
+    }
+    if(p==lista->primeiro && p==lista->ultimo){
+        lista->primeiro = lista->ultimo = NULL;
+        liberaIdoso(p->idoso);
+        free(p);
+        return;
+    }
+    if(p==lista->ultimo){
+        lista->ultimo = anterior;
+        anterior->prox=NULL;
+        liberaIdoso(p->idoso);
+        free(p);
+        return;
+    }
+    if(p==lista->primeiro){
+        lista->primeiro = p->prox;
+    }
+    else{
+        anterior->prox = p->prox;
+    }
+    liberaIdoso(p->idoso);
+    free(p);
+}
 Idoso* getIdoso(Lista* lista, char* nome){
     Celula* p = lista->primeiro;
     while(p && strcmp(nome, getNome(p->idoso))!=0){
@@ -76,6 +110,75 @@ Idoso* getIdoso(Lista* lista, char* nome){
         exit(1);
     }
     return p->idoso;
+}
+Idoso* getIdosoPosicao(Lista* lista, int posicao){
+    Celula* p = lista->primeiro;
+    int i=0;
+    while(p && i<posicao){
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        printf("Não foi encontrado idoso na posição %d\n", posicao);
+        exit(1);
+    }
+    return p->idoso;
+}
+Idoso* AmigoProximoPosicao(Lista* amigos, int * posicao){
+    Celula* p = amigos->primeiro;
+    Celula* aux;
+    double distancia, min=-1;
+    while(p){
+        distancia=calculaDistancia(getPosicaoIdosos(p->idoso), posicao);
+        if(p==amigos->primeiro){
+            min=distancia;
+            aux=p;
+        }
+        if(distancia<min){
+            min=distancia;
+            aux=p;
+        }
+        p=p->prox;
+    }
+    if(min==-1){
+        return NULL;
+    }
+    return aux->idoso;
+}
+FILE* getArquivoEntradaPosicao(Lista* lista, int posicao){
+    Celula* p = lista->primeiro;
+    int i=0;
+    while(p && i<posicao){
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        printf("Não foi encontrado idoso na posição %d\n", posicao);
+        exit(1);
+    }
+    return getArquivoEntrada(p->idoso);
+}
+FILE* getArquivoSaidaPosicao(Lista* lista, int posicao){
+    Celula* p = lista->primeiro;
+    int i=0;
+    while(p && i<posicao){
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        printf("Não foi encontrado idoso na posição %d\n", posicao);
+        exit(1);
+    }
+    return getArquivoSaida(p->idoso);
+}
+int getQtdIdosos(Lista* lista){
+    Celula* p = lista->primeiro;
+    int qtd=0;
+    while(p){
+        qtd++;
+        p=p->prox;
+    }
+    return qtd;
 }
 void imprimeLista(Lista* lista){
     Celula* p=lista->primeiro;

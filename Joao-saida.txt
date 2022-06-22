@@ -1,0 +1,12 @@
+0
+tudo ok
+0
+febre alta, acionou Cuidador1
+0
+tudo ok
+0
+febre baixa, acionou amigo Maria
+0
+tudo ok
+0
+febre baixa, acionou amigo Maria

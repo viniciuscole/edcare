@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 struct celulaCuidador{
     Cuidador* cuidador;
@@ -43,6 +44,61 @@ Cuidador* getCuidador(ListaCuidador* listaCuidador, char* nome){
         return NULL;
     }
     return p->cuidador;
+}
+int getQtdCuidadores(ListaCuidador* listaCuidador){
+    int qtd=0;
+    CelulaCuidador* p = listaCuidador->primeiro;
+    while(p){
+        qtd++;
+        p=p->prox;
+    }
+    return qtd;
+}
+Cuidador* getCuidadorPosicao(ListaCuidador* listaCuidador, int posicao){
+    int i=0;
+    CelulaCuidador* p = listaCuidador->primeiro;
+    while(p && i<posicao){
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        return NULL;
+    }
+    return p->cuidador;
+}
+Cuidador* cuidadorProximoPosicao(ListaCuidador* listaCuidador, int * posicao){
+    CelulaCuidador* p = listaCuidador->primeiro;
+    CelulaCuidador* aux;
+    double distancia, min;
+    while(p){
+        distancia=calculaDistancia(getPosicaoCuidador(p->cuidador), posicao);
+        if(p==listaCuidador->primeiro){
+            min=distancia;
+            aux=p;
+        }
+        if(distancia<min){
+            min=distancia;
+            aux=p;
+        }
+        p=p->prox;
+    }
+    return aux->cuidador;
+}
+double calculaDistancia(int * posicao1, int * posicao2){
+    return sqrt(pow(posicao1[0]-posicao2[0],2)+pow(posicao1[1]-posicao2[1],2));
+}
+FILE* getArquivoCuidadorPosicao(ListaCuidador* lista, int posicao){
+    CelulaCuidador* p = lista->primeiro;
+    int i=0;
+    while(p && i<posicao){
+        p=p->prox;
+        i++;
+    }
+    if(!p){
+        printf("Não foi encontrado cuidador na posição %d\n", posicao);
+        exit(1);
+    }
+    return getArquivoCuidador(p->cuidador);
 }
 void imprimeListaCuidador(ListaCuidador* listaCuidador){
     CelulaCuidador* p;

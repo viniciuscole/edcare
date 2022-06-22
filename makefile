@@ -1,5 +1,5 @@
 all: cuidador.o lista.o idoso.o edcare.o listaCuidadores.o
-	gcc -o edcare.out cuidador.o lista.o idoso.o edcare.o listaCuidadores.o main.c
+	gcc -o edcare.out cuidador.o lista.o idoso.o edcare.o listaCuidadores.o main.c -lm
 
 lista.o: lista.h
 	gcc -c lista.c
