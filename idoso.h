@@ -10,6 +10,7 @@ typedef struct idoso Idoso;
 
 Idoso* inicializaIdoso(char* nome);
 void addAmigo(Idoso* idoso1, Idoso* idoso2);
+int ehAmigo(Idoso* idoso1, Idoso* idoso2);
 FILE* abreArquivoEntrada(Idoso* idoso, char *nomeArquivo);
 FILE* abreArquivoSaida(Idoso* idoso, char *nomeArquivo);
 void fechaArquivoEntrada(Idoso* idoso);

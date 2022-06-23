@@ -68,11 +68,21 @@ void retiraNome(Lista* lista, char* nome){
 }
 void retiraIdososFalecidos(Lista* lista){
     Celula* p = lista->primeiro;
+    Celula* aux;
+    Celula* aux2;
     while(p){
+        aux=p->prox;
         if(idosoFalecido(p->idoso)){
+            // aux2=lista->primeiro;
+            // while(aux2){    
+            //     if(aux!=p && ehAmigo(p->idoso, aux2->idoso)){
+            //         retiraNome(getListaAmigos(aux2->idoso), getNome(p->idoso));
+            //     }
+            //     aux2=aux2->prox;
+            // }
             retiraNome(lista, getNome(p->idoso));
         }
-        p=p->prox;
+        p=aux;
     }
 }
 Idoso* getIdoso(Lista* lista, char* nome){
@@ -104,7 +114,7 @@ Idoso* AmigoProximoPosicao(Lista* amigos, int * posicao){
     Celula* aux;
     double distancia, min=-1;
     while(p){
-        if(!idosoFalecido(p->idoso)){
+        if(p->idoso && idosoFalecido(p->idoso)!=1){
             distancia=calculaDistancia(getPosicaoIdosos(p->idoso), posicao);
             if(min==-1){ // primeira vez
                 min=distancia;

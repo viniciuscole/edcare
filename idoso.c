@@ -41,6 +41,11 @@ void addAmigo(Idoso* idoso1, Idoso* idoso2){
     insereLast(idoso1->amigos, idoso2);
 };
 
+int ehAmigo(Idoso* idoso1, Idoso* idoso2){
+    return getIdoso(idoso1->amigos, idoso2->nome) != NULL;
+};
+
+
 FILE* abreArquivoEntrada(Idoso* idoso, char *nomeArquivo){
     FILE* arquivo = fopen(nomeArquivo, "r");
     idoso->arquivoEntrada = arquivo;
