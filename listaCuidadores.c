@@ -21,7 +21,7 @@ ListaCuidador* inicListaCuidadores(){
     listaCuidador->ultimo=NULL;
     return listaCuidador;
 };
-void insereLastCuidadores(ListaCuidador* listaCuidador, Cuidador* cuidador){
+void insereLastCuidadores(ListaCuidador* listaCuidador, Cuidador* cuidador){    //insere no final da lista de cuidadores um cuidador
     CelulaCuidador* nova = (CelulaCuidador*)malloc(sizeof(CelulaCuidador));
     nova->prox=NULL;
     nova->cuidador= cuidador;
@@ -35,7 +35,7 @@ void insereLastCuidadores(ListaCuidador* listaCuidador, Cuidador* cuidador){
     listaCuidador->ultimo=nova;
     return;
 }
-Cuidador* getCuidador(ListaCuidador* listaCuidador, char* nome){
+Cuidador* getCuidador(ListaCuidador* listaCuidador, char* nome){             //retorna o cuidador com o nome fornecido
     CelulaCuidador* p = listaCuidador->primeiro;
     while(p && strcmp(nome, getNomeCuidador(p->cuidador))!=0){
         p=p->prox;
@@ -54,7 +54,7 @@ int getQtdCuidadores(ListaCuidador* listaCuidador){
     }
     return qtd;
 }
-Cuidador* getCuidadorPosicao(ListaCuidador* listaCuidador, int posicao){
+Cuidador* getCuidadorPosicao(ListaCuidador* listaCuidador, int posicao){     //retorna o cuidador na posicao fornecida
     int i=0;
     CelulaCuidador* p = listaCuidador->primeiro;
     while(p && i<posicao){
@@ -66,7 +66,7 @@ Cuidador* getCuidadorPosicao(ListaCuidador* listaCuidador, int posicao){
     }
     return p->cuidador;
 }
-Cuidador* cuidadorProximoPosicao(ListaCuidador* listaCuidador, int * posicao){
+Cuidador* cuidadorProximoPosicao(ListaCuidador* listaCuidador, int * posicao){   //retorna o cuidador mais proximo da posicao fornecida
     CelulaCuidador* p = listaCuidador->primeiro;
     CelulaCuidador* aux;
     double distancia, min;
@@ -85,7 +85,7 @@ Cuidador* cuidadorProximoPosicao(ListaCuidador* listaCuidador, int * posicao){
     return aux->cuidador;
 }
 double calculaDistancia(int * posicao1, int * posicao2){
-    return sqrt(pow(posicao1[0]-posicao2[0],2)+pow(posicao1[1]-posicao2[1],2));
+    return sqrt(pow(posicao1[0]-posicao2[0],2)+pow(posicao1[1]-posicao2[1],2)); // sqrt((x1-x2)^2+(y1-y2)^2)
 }
 FILE* getArquivoCuidadorPosicao(ListaCuidador* lista, int posicao){
     CelulaCuidador* p = lista->primeiro;
@@ -100,14 +100,14 @@ FILE* getArquivoCuidadorPosicao(ListaCuidador* lista, int posicao){
     }
     return getArquivoCuidador(p->cuidador);
 }
-void imprimeListaCuidador(ListaCuidador* listaCuidador){
-    CelulaCuidador* p;
+void imprimeListaCuidador(ListaCuidador* listaCuidador){                    //imprime todos os cuidadores da lista
+    CelulaCuidador* p;                                                      //para debug
     for(p=listaCuidador->primeiro; p!=NULL; p=p->prox){
         printf("%s\n", getNomeCuidador(p->cuidador));
     }
     free(p);
 }
-void liberaListaCuidador(ListaCuidador* listaCuidador){
+void liberaListaCuidador(ListaCuidador* listaCuidador){                     //libera todos os cuidadores da lista, bem como a lista em si
     CelulaCuidador* p = listaCuidador->primeiro;
     while(p){
         CelulaCuidador* aux = p->prox;
@@ -117,7 +117,7 @@ void liberaListaCuidador(ListaCuidador* listaCuidador){
     }
     free(listaCuidador);
 }
-void liberaCelulasCuidadores(ListaCuidador* lista){
+void liberaCelulasCuidadores(ListaCuidador* lista){                         //libera os cuidadores de uma lista de cuidadores, sem liberar o cuidador em si
     CelulaCuidador* p = lista->primeiro;
     CelulaCuidador* temp = NULL;
     while(p){

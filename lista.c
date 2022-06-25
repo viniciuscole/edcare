@@ -21,7 +21,7 @@ Lista* inicLista(){
     lista->ultimo=NULL;
     return lista;
 };
-void insereLast(Lista* lista, Idoso* idoso){
+void insereLast(Lista* lista, Idoso* idoso){                //Insere no final
     Celula* nova = (Celula*)malloc(sizeof(Celula));
     nova->prox=NULL;
     nova->idoso= idoso;
@@ -34,7 +34,7 @@ void insereLast(Lista* lista, Idoso* idoso){
     lista->ultimo->prox=nova;
     lista->ultimo=nova;
 };
-void retiraNome(Lista* lista, char* nome){
+void retiraNome(Lista* lista, char* nome){                  //Retira da lista o idoso com o nome fornecido
     Celula* anterior=NULL;
     Celula* p = lista->primeiro;
     while(p && strcmp(nome, getNome(p->idoso))!=0){
@@ -66,26 +66,53 @@ void retiraNome(Lista* lista, char* nome){
     liberaIdoso(p->idoso);
     free(p);
 }
-void retiraIdososFalecidos(Lista* lista){
+void retiraNomeSemLiberarIdoso(Lista* lista, char* nome){       //Retira da lista o idoso com o nome fornecido, sem liberar sua memória
+    Celula* anterior=NULL;
+    Celula* p = lista->primeiro;
+    while(p && strcmp(nome, getNome(p->idoso))!=0){
+        anterior=p;
+        p=p->prox;
+    }
+    if(!p){
+        printf("Não foi encontrado\n");
+    }
+    if(p==lista->primeiro && p==lista->ultimo){
+        lista->primeiro = lista->ultimo = NULL;
+        
+        free(p);
+        return;
+    }
+    if(p==lista->ultimo){
+        lista->ultimo = anterior;
+        anterior->prox=NULL;
+        
+        free(p);
+        return;
+    }
+    if(p==lista->primeiro){
+        lista->primeiro = p->prox;
+    }
+    else{
+        anterior->prox = p->prox;
+    }
+    
+    free(p);
+}
+void retiraIdososFalecidos(Lista* lista){                       //Retira da lista os idosos falecidos
     Celula* p = lista->primeiro;
     Celula* aux;
-    Celula* aux2;
     while(p){
         aux=p->prox;
         if(idosoFalecido(p->idoso)){
-            // aux2=lista->primeiro;
-            // while(aux2){    
-            //     if(aux!=p && ehAmigo(p->idoso, aux2->idoso)){
-            //         retiraNome(getListaAmigos(aux2->idoso), getNome(p->idoso));
-            //     }
-            //     aux2=aux2->prox;
-            // }
-            retiraNome(lista, getNome(p->idoso));
+            retiraListaAmigos(p->idoso);                        //Idoso é retirado da lista de amigos de todos os seus amigos
+            fechaArquivoEntrada(p->idoso);                      //fecha cada arquivo de leitura de cada idoso
+            fechaArquivoSaida(p->idoso);  
+            retiraNome(lista, getNome(p->idoso));               //É retirado da lista de idosos e apagado da memória
         }
         p=aux;
     }
 }
-Idoso* getIdoso(Lista* lista, char* nome){
+Idoso* getIdoso(Lista* lista, char* nome){                      //Retorna o idoso com o nome fornecido
     Celula* p = lista->primeiro;
     while(p && strcmp(nome, getNome(p->idoso))!=0){
         p=p->prox;
@@ -96,25 +123,24 @@ Idoso* getIdoso(Lista* lista, char* nome){
     }
     return p->idoso;
 }
-Idoso* getIdosoPosicao(Lista* lista, int posicao){
-    Celula* p = lista->primeiro;
+Idoso* getIdosoPosicao(Lista* lista, int posicao){               //Retorna o idoso na posição fornecida
+    Celula* p = lista->primeiro;                                 //(posição começa em 0)
     int i=0;
     while(p && i<posicao){
         p=p->prox;
         i++;
     }
     if(!p){
-        printf("Não foi encontrado idoso na posição %d\n", posicao);
-        exit(1);
+        return NULL;
     }
     return p->idoso;
 }
-Idoso* AmigoProximoPosicao(Lista* amigos, int * posicao){
+Idoso* AmigoProximoPosicao(Lista* amigos, int * posicao){       //Retorna o amigo mais próximo de um idoso que está na posição fornecida([lat, long])
     Celula* p = amigos->primeiro;
     Celula* aux;
     double distancia, min=-1;
     while(p){
-        if(p->idoso && idosoFalecido(p->idoso)!=1){
+        if(p->idoso && idosoFalecido(p->idoso)!=1){             //Se o amigo não estiver falecido
             distancia=calculaDistancia(getPosicaoIdosos(p->idoso), posicao);
             if(min==-1){ // primeira vez
                 min=distancia;
@@ -167,14 +193,15 @@ int getQtdIdosos(Lista* lista){
     }
     return qtd;
 }
-void imprimeLista(Lista* lista){
-    Celula* p=lista->primeiro;
-    for(p=lista->primeiro; p!=NULL; p=p->prox){
+void imprimeLista(Lista* lista){                   //Imprime todos os idosos da lista
+    Celula* p=lista->primeiro;                     //Debug
+    while(p){
         printf("%s\n", getNome(p->idoso));
+        p=p->prox;
     }
     free(p);
 };
-void liberaLista(Lista* lista){
+void liberaLista(Lista* lista){                     //Libera toda a memória alocada para a lista, e a memória de cada idoso que está nela
     Celula* p = lista->primeiro;
     Celula* temp = NULL;
     while(p){
@@ -185,8 +212,8 @@ void liberaLista(Lista* lista){
     }
     free(lista); 
 };
-void liberaCelulasAmigos(Lista* lista){
-    Celula* p = lista->primeiro;
+void liberaCelulasAmigos(Lista* lista){             //Libera as células de uma lista, sem liberar a memória de cada idoso que está nela
+    Celula* p = lista->primeiro;                    //Usada para liberar as referencias de amigos de um idoso, sem liberar a memória de cada amigo que está nela
     Celula* temp = NULL;
     while(p){
         temp=p->prox;

@@ -20,4 +20,4 @@ val: edcare.out
 	valgrind ./edcare.out 4
 
 clean: 
-	rm -f *.o *-saida.txt
+	rm -f *.o *-saida.txt edcare.out
